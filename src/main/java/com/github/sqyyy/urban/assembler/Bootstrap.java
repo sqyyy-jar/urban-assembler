@@ -4,22 +4,21 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static com.github.sqyyy.urban.assembler.Builder.*;
-
 public class Bootstrap {
     public static void main(String[] args) throws IOException {
-        ConstLabel("msg");
-        CStringConstant("Hello world!\n");
+        var asm = new ModuleAssembler();
+        asm.constLabel("msg");
+        asm.constCStr("Hello world!\n");
 
-        CodeLabel("loop");
-        Mov(0, 1L);
-        MovAbs(1, "msg");
-        Mov(2, 13L);
-        Interrupt(1L);
-        B("loop");
-        Halt();
+        asm.codeLabel("loop");
+        asm.mov(0, 1L);
+        asm.movAbs(1, "msg");
+        asm.mov(2, 13L);
+        asm.interrupt(1L);
+        asm.branch("loop");
+        asm.halt();
 
         var fio = Files.newOutputStream(Path.of("test.bin"));
-        write(fio);
+        asm.write(fio);
     }
 }
