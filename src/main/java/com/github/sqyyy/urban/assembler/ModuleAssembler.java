@@ -80,7 +80,7 @@ public final class ModuleAssembler {
             i++;
         }
         for (var constant : constants) {
-            constant.write(out);
+            constant.write(out, labelsImmutable, instructions.size());
         }
     }
 
@@ -106,6 +106,10 @@ public final class ModuleAssembler {
 
     public void constCStr(String value) {
         constants.add(new Constant.CString(value));
+    }
+
+    public void constAbsLabel(String label) {
+        constants.add(new Constant.AbsoluteLabelAddress(label));
     }
 
     public void add(int reg0, int reg1, int reg2) {
