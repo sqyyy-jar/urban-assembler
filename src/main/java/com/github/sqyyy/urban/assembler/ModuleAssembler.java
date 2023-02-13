@@ -71,21 +71,24 @@ public final class ModuleAssembler {
     private final Map<String, Label> labels = new HashMap<>();
     private final List<Instruction> instructions = new ArrayList<>();
     private final List<Constant> constants = new ArrayList<>();
+    private final List<AssembledModule> modules = new ArrayList<>();
 
     public void write(OutputStream out) throws IOException {
         var i = 0;
-        var labelsImmutable = Collections.unmodifiableMap(labels);
         for (var instruction : instructions) {
-            Bits.writeInt(out, instruction.write(labelsImmutable, instructions.size(), i));
+            Bits.writeInt(out, instruction.write(this, i));
             i++;
         }
         for (var constant : constants) {
-            constant.write(out, labelsImmutable, instructions.size());
+            constant.write(out, this);
+        }
+        for (var module : modules) {
+            module.write(out);
         }
     }
 
     public void labelCode(String label) {
-        labels.putIfAbsent(label, new Label(instructions.size(), false));
+        labels.putIfAbsent(label, new Label.Assembler(instructions.size(), false));
     }
 
     public void labelConst(String label) {
@@ -93,7 +96,7 @@ public final class ModuleAssembler {
         for (var constant : constants) {
             offset += constant.len();
         }
-        labels.putIfAbsent(label, new Label(offset, true));
+        labels.putIfAbsent(label, new Label.Assembler(offset, true));
     }
 
     public void constInt(long value) {
@@ -342,5 +345,38 @@ public final class ModuleAssembler {
 
     public void xor(int reg0, int reg1, int reg2) {
         instructions.add(new Xor(reg0, reg1, reg2));
+    }
+
+    public void addModule(AssembledModule module) {
+        for (var entry : module.getOffsetTable()
+            .entrySet()) {
+            labels.putIfAbsent(entry.getKey(), new Label.Compiled(modules.size(), entry.getValue()));
+        }
+        modules.add(module);
+    }
+
+    public int countInstructions() {
+        return instructions.size();
+    }
+
+    public int countConstantBytes() {
+        var sum = 0;
+        for (var constant : constants) {
+            sum += constant.len() * 4;
+        }
+        return sum;
+    }
+
+    public int moduleOffsetBytes(int module) {
+        var sum = 0;
+        for (int i = 0; i < module - 1; i++) {
+            var entry = modules.get(i);
+            sum += entry.length();
+        }
+        return sum;
+    }
+
+    public Map<String, Label> getLabels() {
+        return Collections.unmodifiableMap(labels);
     }
 }
