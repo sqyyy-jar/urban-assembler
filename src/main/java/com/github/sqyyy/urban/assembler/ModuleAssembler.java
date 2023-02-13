@@ -84,11 +84,11 @@ public final class ModuleAssembler {
         }
     }
 
-    public void codeLabel(String label) {
+    public void labelCode(String label) {
         labels.putIfAbsent(label, new Label(instructions.size(), false));
     }
 
-    public void constLabel(String label) {
+    public void labelConst(String label) {
         var offset = 0;
         for (var constant : constants) {
             offset += constant.len();
