@@ -8,11 +8,6 @@ import java.util.Objects;
 
 public record BranchNotEqualLabel(int reg0, String label) implements Instruction {
     @Override
-    public int write() {
-        return 0;
-    }
-
-    @Override
     public int write(Map<String, Label> labels, int instructionCount, int instructionIndex) {
         var target = Objects.requireNonNull(labels.get(label));
         int opc = 0x30000000;
