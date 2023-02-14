@@ -10,7 +10,7 @@ public record StoreLabel(int reg0, String label) implements Instruction {
     public int write(ModuleAssembler module, int instructionIndex) {
         var target = Objects.requireNonNull(module.getLabels()
             .get(label));
-        int opc = 0xa0000000;
+        int opc = 0x88000000;
         opc |= (target.absoluteByteAddress(module) / 4 - instructionIndex & 0x1fffff) << 5;
         opc |= reg0 & 0x1F;
         return opc;

@@ -10,7 +10,7 @@ public record BranchLabel(String label) implements Instruction {
     public int write(ModuleAssembler module, int instructionIndex) {
         var target = Objects.requireNonNull(module.getLabels()
             .get(label));
-        int opc = 0x18000000;
+        int opc = 0x10000000;
         var a = target.absoluteByteAddress(module) / 4;
         opc |= (a - instructionIndex & 0x3ffffff);
         return opc;

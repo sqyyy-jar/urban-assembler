@@ -7,7 +7,6 @@ public record BranchImmediate(long immediate) implements Instruction {
     public int write() {
         int opc = 0x10000000;
         opc |= (int) immediate & 0x1f;
-
         return opc;
     }
 }
