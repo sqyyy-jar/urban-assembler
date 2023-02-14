@@ -6,8 +6,8 @@ public record BranchGreaterEqualImmediate(int reg0, long immediate) implements I
     @Override
     public int write() {
         int opc = 0x20000000;
-        opc |= this.reg0 & 0x1F;
-        opc |= ((int) this.immediate & 0x1fffff) << 5;
+        opc |= reg0 & 0x1f;
+        opc |= ((int) immediate & 0x3fffff) << 5;
         return opc;
     }
 }

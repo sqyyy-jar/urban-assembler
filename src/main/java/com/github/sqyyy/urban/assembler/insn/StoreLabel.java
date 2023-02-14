@@ -5,7 +5,7 @@ import com.github.sqyyy.urban.assembler.ModuleAssembler;
 
 import java.util.Objects;
 
-public record StrLabel(int reg0, String label) implements Instruction {
+public record StoreLabel(int reg0, String label) implements Instruction {
     @Override
     public int write(ModuleAssembler module, int instructionIndex) {
         var target = Objects.requireNonNull(module.getLabels()

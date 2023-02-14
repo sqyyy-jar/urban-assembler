@@ -4,7 +4,7 @@ import com.github.sqyyy.urban.assembler.insn.Add;
 import com.github.sqyyy.urban.assembler.insn.AddFloat;
 import com.github.sqyyy.urban.assembler.insn.AddImmediate;
 import com.github.sqyyy.urban.assembler.insn.AddSigned;
-import com.github.sqyyy.urban.assembler.insn.AddSingedImmediate;
+import com.github.sqyyy.urban.assembler.insn.AddSignedImmediate;
 import com.github.sqyyy.urban.assembler.insn.And;
 import com.github.sqyyy.urban.assembler.insn.BranchEqualImmediate;
 import com.github.sqyyy.urban.assembler.insn.BranchEqualLabel;
@@ -13,13 +13,13 @@ import com.github.sqyyy.urban.assembler.insn.BranchGreaterEqualLabel;
 import com.github.sqyyy.urban.assembler.insn.BranchGreaterImmediate;
 import com.github.sqyyy.urban.assembler.insn.BranchGreaterLabel;
 import com.github.sqyyy.urban.assembler.insn.BranchImmediate;
-import com.github.sqyyy.urban.assembler.insn.BranchImmediateLinked;
 import com.github.sqyyy.urban.assembler.insn.BranchLabel;
 import com.github.sqyyy.urban.assembler.insn.BranchLabelLinked;
 import com.github.sqyyy.urban.assembler.insn.BranchLessEqualImmediate;
 import com.github.sqyyy.urban.assembler.insn.BranchLessEqualLabel;
 import com.github.sqyyy.urban.assembler.insn.BranchLessImmediate;
 import com.github.sqyyy.urban.assembler.insn.BranchLessLabel;
+import com.github.sqyyy.urban.assembler.insn.BranchLinkedImmediate;
 import com.github.sqyyy.urban.assembler.insn.BranchNotEqualImmediate;
 import com.github.sqyyy.urban.assembler.insn.BranchNotEqualLabel;
 import com.github.sqyyy.urban.assembler.insn.BranchRegister;
@@ -31,13 +31,13 @@ import com.github.sqyyy.urban.assembler.insn.DivSigned;
 import com.github.sqyyy.urban.assembler.insn.DivSignedImmediate;
 import com.github.sqyyy.urban.assembler.insn.Halt;
 import com.github.sqyyy.urban.assembler.insn.InterruptImmediate;
-import com.github.sqyyy.urban.assembler.insn.Ldr;
-import com.github.sqyyy.urban.assembler.insn.LdrImmediate;
-import com.github.sqyyy.urban.assembler.insn.LdrLabel;
-import com.github.sqyyy.urban.assembler.insn.Mov;
+import com.github.sqyyy.urban.assembler.insn.LoadLabel;
+import com.github.sqyyy.urban.assembler.insn.Load;
+import com.github.sqyyy.urban.assembler.insn.LoadImmediate;
 import com.github.sqyyy.urban.assembler.insn.MovAbsLabel;
-import com.github.sqyyy.urban.assembler.insn.MovImmediate;
-import com.github.sqyyy.urban.assembler.insn.MovSignedImmediate;
+import com.github.sqyyy.urban.assembler.insn.Move;
+import com.github.sqyyy.urban.assembler.insn.MoveImmediate;
+import com.github.sqyyy.urban.assembler.insn.MoveSignedImmediate;
 import com.github.sqyyy.urban.assembler.insn.Mul;
 import com.github.sqyyy.urban.assembler.insn.MulFloat;
 import com.github.sqyyy.urban.assembler.insn.MulImmediate;
@@ -49,9 +49,9 @@ import com.github.sqyyy.urban.assembler.insn.Or;
 import com.github.sqyyy.urban.assembler.insn.ShlImmediate;
 import com.github.sqyyy.urban.assembler.insn.ShrImmediate;
 import com.github.sqyyy.urban.assembler.insn.ShrsImmediate;
-import com.github.sqyyy.urban.assembler.insn.Str;
-import com.github.sqyyy.urban.assembler.insn.StrImmediate;
-import com.github.sqyyy.urban.assembler.insn.StrLabel;
+import com.github.sqyyy.urban.assembler.insn.Store;
+import com.github.sqyyy.urban.assembler.insn.StoreImmediate;
+import com.github.sqyyy.urban.assembler.insn.StoreLabel;
 import com.github.sqyyy.urban.assembler.insn.Sub;
 import com.github.sqyyy.urban.assembler.insn.SubFloat;
 import com.github.sqyyy.urban.assembler.insn.SubImmediate;
@@ -132,7 +132,7 @@ public final class ModuleAssembler {
     }
 
     public void adds(int reg0, int reg1, long immediate) {
-        instructions.add(new AddSingedImmediate(reg0, reg1, immediate));
+        instructions.add(new AddSignedImmediate(reg0, reg1, immediate));
     }
 
     public void and(int reg0, int reg1, int reg2) {
@@ -196,7 +196,7 @@ public final class ModuleAssembler {
     }
 
     public void branchLinked(long immediate) {
-        instructions.add(new BranchImmediateLinked(immediate));
+        instructions.add(new BranchLinkedImmediate(immediate));
     }
 
     public void branchLinked(String label) {
@@ -240,23 +240,23 @@ public final class ModuleAssembler {
     }
 
     public void ldr(int reg0, int reg1) {
-        instructions.add(new Ldr(reg0, reg1));
+        instructions.add(new Load(reg0, reg1));
     }
 
     public void ldr(int reg0, long immediate) {
-        instructions.add(new LdrImmediate(reg0, immediate));
+        instructions.add(new LoadImmediate(reg0, immediate));
     }
 
     public void ldr(int reg0, String label) {
-        instructions.add(new LdrLabel(reg0, label));
+        instructions.add(new LoadLabel(reg0, label));
     }
 
     public void mov(int reg0, int reg1) {
-        instructions.add(new Mov(reg0, reg1));
+        instructions.add(new Move(reg0, reg1));
     }
 
     public void mov(int reg0, long immediate) {
-        instructions.add(new MovImmediate(reg0, immediate));
+        instructions.add(new MoveImmediate(reg0, immediate));
     }
 
     public void movAbs(int reg0, String label) {
@@ -264,7 +264,7 @@ public final class ModuleAssembler {
     }
 
     public void movs(int reg0, long immediate) {
-        instructions.add(new MovSignedImmediate(reg0, immediate));
+        instructions.add(new MoveSignedImmediate(reg0, immediate));
     }
 
     public void mul(int reg0, int reg1, int reg2) {
@@ -312,15 +312,15 @@ public final class ModuleAssembler {
     }
 
     public void str(int reg0, int reg1) {
-        instructions.add(new Str(reg0, reg1));
+        instructions.add(new Store(reg0, reg1));
     }
 
     public void str(int reg0, long immediate) {
-        instructions.add(new StrImmediate(reg0, immediate));
+        instructions.add(new StoreImmediate(reg0, immediate));
     }
 
     public void str(int reg0, String label) {
-        instructions.add(new StrLabel(reg0, label));
+        instructions.add(new StoreLabel(reg0, label));
     }
 
     public void sub(int reg0, int reg1, int reg2) {

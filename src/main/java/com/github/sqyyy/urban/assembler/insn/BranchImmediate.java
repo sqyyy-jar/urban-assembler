@@ -5,8 +5,9 @@ import com.github.sqyyy.urban.assembler.Instruction;
 public record BranchImmediate(long immediate) implements Instruction {
     @Override
     public int write() {
-        int opc = 0x18000000;
-        opc |= ((int) this.immediate & 0x3ffffff);
+        int opc = 0x10000000;
+        opc |= (int) immediate & 0x1f;
+
         return opc;
     }
 }

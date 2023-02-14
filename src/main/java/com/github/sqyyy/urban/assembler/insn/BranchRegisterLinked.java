@@ -5,8 +5,8 @@ import com.github.sqyyy.urban.assembler.Instruction;
 public record BranchRegisterLinked(int reg0) implements Instruction {
     @Override
     public int write() {
-        int opc = 0x3c000000;
-        opc |= this.reg0 & 0x1F;
+        int opc = 0xf8a00000;
+        opc |= reg0 & 0x1f;
         return opc;
     }
 }

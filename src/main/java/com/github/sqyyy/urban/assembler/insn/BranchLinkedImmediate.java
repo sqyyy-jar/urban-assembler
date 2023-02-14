@@ -2,12 +2,12 @@ package com.github.sqyyy.urban.assembler.insn;
 
 import com.github.sqyyy.urban.assembler.Instruction;
 
-public record Str(int reg0, int reg1) implements Instruction {
+public record BranchLinkedImmediate(long immediate) implements Instruction {
     @Override
     public int write() {
-        int opc = 0x9c000000;
-        opc |= (this.reg0 & 0x1F) << 5;
-        opc |= this.reg1 & 0x1F;
+        int opc = 0x48000000;
+        opc |= (int) immediate & 0x1f;
+
         return opc;
     }
 }
