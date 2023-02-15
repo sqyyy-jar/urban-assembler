@@ -32,8 +32,11 @@ import com.github.sqyyy.urban.assembler.insn.DivSignedImmediate;
 import com.github.sqyyy.urban.assembler.insn.Halt;
 import com.github.sqyyy.urban.assembler.insn.InterruptImmediate;
 import com.github.sqyyy.urban.assembler.insn.Load;
+import com.github.sqyyy.urban.assembler.insn.LoadByte;
+import com.github.sqyyy.urban.assembler.insn.LoadHalf;
 import com.github.sqyyy.urban.assembler.insn.LoadImmediate;
 import com.github.sqyyy.urban.assembler.insn.LoadLabel;
+import com.github.sqyyy.urban.assembler.insn.LoadWord;
 import com.github.sqyyy.urban.assembler.insn.MovAbsLabel;
 import com.github.sqyyy.urban.assembler.insn.Move;
 import com.github.sqyyy.urban.assembler.insn.MoveImmediate;
@@ -50,8 +53,11 @@ import com.github.sqyyy.urban.assembler.insn.ShlImmediate;
 import com.github.sqyyy.urban.assembler.insn.ShrImmediate;
 import com.github.sqyyy.urban.assembler.insn.ShrsImmediate;
 import com.github.sqyyy.urban.assembler.insn.Store;
+import com.github.sqyyy.urban.assembler.insn.StoreByte;
+import com.github.sqyyy.urban.assembler.insn.StoreHalf;
 import com.github.sqyyy.urban.assembler.insn.StoreImmediate;
 import com.github.sqyyy.urban.assembler.insn.StoreLabel;
+import com.github.sqyyy.urban.assembler.insn.StoreWord;
 import com.github.sqyyy.urban.assembler.insn.Sub;
 import com.github.sqyyy.urban.assembler.insn.SubFloat;
 import com.github.sqyyy.urban.assembler.insn.SubImmediate;
@@ -243,6 +249,18 @@ public final class ModuleAssembler {
         instructions.add(new Load(reg0, reg1, offset));
     }
 
+    public void ldrByte(int reg0, int reg1, long offset) {
+        instructions.add(new LoadByte(reg0, reg1, offset));
+    }
+
+    public void ldrHalf(int reg0, int reg1, long offset) {
+        instructions.add(new LoadHalf(reg0, reg1, offset));
+    }
+
+    public void ldrWord(int reg0, int reg1, long offset) {
+        instructions.add(new LoadWord(reg0, reg1, offset));
+    }
+
     public void ldr(int reg0, long immediate) {
         instructions.add(new LoadImmediate(reg0, immediate));
     }
@@ -313,6 +331,18 @@ public final class ModuleAssembler {
 
     public void str(int reg0, int reg1, long offset) {
         instructions.add(new Store(reg0, reg1, offset));
+    }
+
+    public void strByte(int reg0, int reg1, long offset) {
+        instructions.add(new StoreByte(reg0, reg1, offset));
+    }
+
+    public void strHalf(int reg0, int reg1, long offset) {
+        instructions.add(new StoreHalf(reg0, reg1, offset));
+    }
+
+    public void strWord(int reg0, int reg1, long offset) {
+        instructions.add(new StoreWord(reg0, reg1, offset));
     }
 
     public void str(int reg0, long immediate) {
