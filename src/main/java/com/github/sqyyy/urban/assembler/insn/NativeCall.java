@@ -2,10 +2,10 @@ package com.github.sqyyy.urban.assembler.insn;
 
 import com.github.sqyyy.urban.assembler.Instruction;
 
-public record InterruptImmediate(long immediate) implements Instruction {
+public record NativeCall(long immediate) implements Instruction {
     @Override
     public int write() {
-        int opc = 0xf9400000;
+        int opc = 0xfa600000;
         opc |= (int) immediate & 0x1f;
         return opc;
     }

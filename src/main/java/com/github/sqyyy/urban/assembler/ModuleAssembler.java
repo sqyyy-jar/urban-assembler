@@ -46,6 +46,7 @@ import com.github.sqyyy.urban.assembler.insn.MulFloat;
 import com.github.sqyyy.urban.assembler.insn.MulImmediate;
 import com.github.sqyyy.urban.assembler.insn.MulSigned;
 import com.github.sqyyy.urban.assembler.insn.MulSignedImmediate;
+import com.github.sqyyy.urban.assembler.insn.NativeCall;
 import com.github.sqyyy.urban.assembler.insn.Nop;
 import com.github.sqyyy.urban.assembler.insn.Not;
 import com.github.sqyyy.urban.assembler.insn.Or;
@@ -63,6 +64,7 @@ import com.github.sqyyy.urban.assembler.insn.SubFloat;
 import com.github.sqyyy.urban.assembler.insn.SubImmediate;
 import com.github.sqyyy.urban.assembler.insn.SubSigned;
 import com.github.sqyyy.urban.assembler.insn.SubSignedImmediate;
+import com.github.sqyyy.urban.assembler.insn.VirtualCall;
 import com.github.sqyyy.urban.assembler.insn.Xor;
 
 import java.io.IOException;
@@ -375,6 +377,14 @@ public final class ModuleAssembler {
 
     public void xor(int reg0, int reg1, int reg2) {
         instructions.add(new Xor(reg0, reg1, reg2));
+    }
+
+    public void ncall(long imm) {
+        instructions.add(new NativeCall(imm));
+    }
+
+    public void vcall(long imm) {
+        instructions.add(new VirtualCall(imm));
     }
 
     public void addModule(AssembledModule module) {
