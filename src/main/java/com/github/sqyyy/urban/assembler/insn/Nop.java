@@ -5,8 +5,6 @@ import com.github.sqyyy.urban.assembler.Instruction;
 public record Nop() implements Instruction {
     @Override
     public int write() {
-        int opc = 0xfa000000;
-
-        return opc;
+        return 0xfa600000;
     }
 }

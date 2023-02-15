@@ -31,9 +31,9 @@ import com.github.sqyyy.urban.assembler.insn.DivSigned;
 import com.github.sqyyy.urban.assembler.insn.DivSignedImmediate;
 import com.github.sqyyy.urban.assembler.insn.Halt;
 import com.github.sqyyy.urban.assembler.insn.InterruptImmediate;
-import com.github.sqyyy.urban.assembler.insn.LoadLabel;
 import com.github.sqyyy.urban.assembler.insn.Load;
 import com.github.sqyyy.urban.assembler.insn.LoadImmediate;
+import com.github.sqyyy.urban.assembler.insn.LoadLabel;
 import com.github.sqyyy.urban.assembler.insn.MovAbsLabel;
 import com.github.sqyyy.urban.assembler.insn.Move;
 import com.github.sqyyy.urban.assembler.insn.MoveImmediate;
@@ -239,8 +239,8 @@ public final class ModuleAssembler {
         instructions.add(new InterruptImmediate(immediate));
     }
 
-    public void ldr(int reg0, int reg1) {
-        instructions.add(new Load(reg0, reg1));
+    public void ldr(int reg0, int reg1, long offset) {
+        instructions.add(new Load(reg0, reg1, offset));
     }
 
     public void ldr(int reg0, long immediate) {
@@ -311,8 +311,8 @@ public final class ModuleAssembler {
         instructions.add(new ShrsImmediate(reg0, reg1, immediate));
     }
 
-    public void str(int reg0, int reg1) {
-        instructions.add(new Store(reg0, reg1));
+    public void str(int reg0, int reg1, long offset) {
+        instructions.add(new Store(reg0, reg1, offset));
     }
 
     public void str(int reg0, long immediate) {
