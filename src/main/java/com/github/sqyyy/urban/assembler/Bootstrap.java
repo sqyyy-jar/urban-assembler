@@ -36,7 +36,6 @@ public class Bootstrap {
 
         asm.ldr(0, "num");
         asm.branchLinked("math:sqrt");
-        //        asm.panic();
 
         asm.movAbs(1, "buf");
         asm.mov(2, 256L);
