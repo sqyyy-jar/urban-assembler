@@ -50,6 +50,7 @@ import com.github.sqyyy.urban.assembler.insn.NativeCall;
 import com.github.sqyyy.urban.assembler.insn.Nop;
 import com.github.sqyyy.urban.assembler.insn.Not;
 import com.github.sqyyy.urban.assembler.insn.Or;
+import com.github.sqyyy.urban.assembler.insn.Raw;
 import com.github.sqyyy.urban.assembler.insn.ShlImmediate;
 import com.github.sqyyy.urban.assembler.insn.ShrImmediate;
 import com.github.sqyyy.urban.assembler.insn.ShrsImmediate;
@@ -385,6 +386,10 @@ public final class ModuleAssembler {
 
     public void vcall(long imm) {
         instructions.add(new VirtualCall(imm));
+    }
+
+    public void panic() {
+        instructions.add(new Raw(0xfa800001));
     }
 
     public void addModule(AssembledModule module) {

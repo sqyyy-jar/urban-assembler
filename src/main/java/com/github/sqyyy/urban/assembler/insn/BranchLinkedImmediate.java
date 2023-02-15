@@ -6,7 +6,7 @@ public record BranchLinkedImmediate(long immediate) implements Instruction {
     @Override
     public int write() {
         int opc = 0x48000000;
-        opc |= (int) immediate & 0x1f;
+        opc |= (int) immediate & 0x7ffffff;
         return opc;
     }
 }

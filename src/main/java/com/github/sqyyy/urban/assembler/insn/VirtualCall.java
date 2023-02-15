@@ -6,7 +6,7 @@ public record VirtualCall(long immediate) implements Instruction {
     @Override
     public int write() {
         int opc = 0xfc200000;
-        opc |= (int) immediate & 0x1f;
+        opc |= (int) immediate & 0x1fffff;
         return opc;
     }
 }

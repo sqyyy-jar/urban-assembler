@@ -10,8 +10,8 @@ public record LoadLabel(int reg0, String label) implements Instruction {
     public int write(ModuleAssembler module, int instructionIndex) {
         var target = Objects.requireNonNull(module.getLabels()
             .get(label));
-        int opc = 0xf9600000;
-        opc |= ((target.absoluteByteAddress(module) / 4 - instructionIndex) & 0x1fffff) << 5;
+        int opc = 0x60000000;
+        opc |= ((target.absoluteByteAddress(module) / 4 - instructionIndex) & 0x3fffff) << 5;
         opc |= reg0 & 0x1F;
         return opc;
     }
