@@ -1,72 +1,6 @@
 package com.github.sqyyy.urban.assembler;
 
-import com.github.sqyyy.urban.assembler.insn.Add;
-import com.github.sqyyy.urban.assembler.insn.AddFloat;
-import com.github.sqyyy.urban.assembler.insn.AddImmediate;
-import com.github.sqyyy.urban.assembler.insn.AddSigned;
-import com.github.sqyyy.urban.assembler.insn.AddSignedImmediate;
-import com.github.sqyyy.urban.assembler.insn.And;
-import com.github.sqyyy.urban.assembler.insn.BranchEqualImmediate;
-import com.github.sqyyy.urban.assembler.insn.BranchEqualLabel;
-import com.github.sqyyy.urban.assembler.insn.BranchGreaterEqualImmediate;
-import com.github.sqyyy.urban.assembler.insn.BranchGreaterEqualLabel;
-import com.github.sqyyy.urban.assembler.insn.BranchGreaterImmediate;
-import com.github.sqyyy.urban.assembler.insn.BranchGreaterLabel;
-import com.github.sqyyy.urban.assembler.insn.BranchImmediate;
-import com.github.sqyyy.urban.assembler.insn.BranchLabel;
-import com.github.sqyyy.urban.assembler.insn.BranchLabelLinked;
-import com.github.sqyyy.urban.assembler.insn.BranchLessEqualImmediate;
-import com.github.sqyyy.urban.assembler.insn.BranchLessEqualLabel;
-import com.github.sqyyy.urban.assembler.insn.BranchLessImmediate;
-import com.github.sqyyy.urban.assembler.insn.BranchLessLabel;
-import com.github.sqyyy.urban.assembler.insn.BranchLinkedImmediate;
-import com.github.sqyyy.urban.assembler.insn.BranchNotEqualImmediate;
-import com.github.sqyyy.urban.assembler.insn.BranchNotEqualLabel;
-import com.github.sqyyy.urban.assembler.insn.BranchRegister;
-import com.github.sqyyy.urban.assembler.insn.BranchRegisterLinked;
-import com.github.sqyyy.urban.assembler.insn.Div;
-import com.github.sqyyy.urban.assembler.insn.DivFloat;
-import com.github.sqyyy.urban.assembler.insn.DivImmediate;
-import com.github.sqyyy.urban.assembler.insn.DivSigned;
-import com.github.sqyyy.urban.assembler.insn.DivSignedImmediate;
-import com.github.sqyyy.urban.assembler.insn.Halt;
-import com.github.sqyyy.urban.assembler.insn.InterruptImmediate;
-import com.github.sqyyy.urban.assembler.insn.Load;
-import com.github.sqyyy.urban.assembler.insn.LoadByte;
-import com.github.sqyyy.urban.assembler.insn.LoadHalf;
-import com.github.sqyyy.urban.assembler.insn.LoadImmediate;
-import com.github.sqyyy.urban.assembler.insn.LoadLabel;
-import com.github.sqyyy.urban.assembler.insn.LoadWord;
-import com.github.sqyyy.urban.assembler.insn.MovAbsLabel;
-import com.github.sqyyy.urban.assembler.insn.Move;
-import com.github.sqyyy.urban.assembler.insn.MoveImmediate;
-import com.github.sqyyy.urban.assembler.insn.MoveSignedImmediate;
-import com.github.sqyyy.urban.assembler.insn.Mul;
-import com.github.sqyyy.urban.assembler.insn.MulFloat;
-import com.github.sqyyy.urban.assembler.insn.MulImmediate;
-import com.github.sqyyy.urban.assembler.insn.MulSigned;
-import com.github.sqyyy.urban.assembler.insn.MulSignedImmediate;
-import com.github.sqyyy.urban.assembler.insn.NativeCall;
-import com.github.sqyyy.urban.assembler.insn.Nop;
-import com.github.sqyyy.urban.assembler.insn.Not;
-import com.github.sqyyy.urban.assembler.insn.Or;
-import com.github.sqyyy.urban.assembler.insn.Raw;
-import com.github.sqyyy.urban.assembler.insn.ShlImmediate;
-import com.github.sqyyy.urban.assembler.insn.ShrImmediate;
-import com.github.sqyyy.urban.assembler.insn.ShrsImmediate;
-import com.github.sqyyy.urban.assembler.insn.Store;
-import com.github.sqyyy.urban.assembler.insn.StoreByte;
-import com.github.sqyyy.urban.assembler.insn.StoreHalf;
-import com.github.sqyyy.urban.assembler.insn.StoreImmediate;
-import com.github.sqyyy.urban.assembler.insn.StoreLabel;
-import com.github.sqyyy.urban.assembler.insn.StoreWord;
-import com.github.sqyyy.urban.assembler.insn.Sub;
-import com.github.sqyyy.urban.assembler.insn.SubFloat;
-import com.github.sqyyy.urban.assembler.insn.SubImmediate;
-import com.github.sqyyy.urban.assembler.insn.SubSigned;
-import com.github.sqyyy.urban.assembler.insn.SubSignedImmediate;
-import com.github.sqyyy.urban.assembler.insn.VirtualCall;
-import com.github.sqyyy.urban.assembler.insn.Xor;
+import com.github.sqyyy.urban.assembler.insn.*;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -218,6 +152,18 @@ public final class ModuleAssembler {
 
     public void branchLinked(int reg0) {
         instructions.add(new BranchRegisterLinked(reg0));
+    }
+
+    public void cmp(int reg0, int reg1, int reg2) {
+        instructions.add(new Compare(reg0, reg1, reg2));
+    }
+
+    public void cmpf(int reg0, int reg1, int reg2) {
+        instructions.add(new CompareFloat(reg0, reg1, reg2));
+    }
+
+    public void cmps(int reg0, int reg1, int reg2) {
+        instructions.add(new CompareSigned(reg0, reg1, reg2));
     }
 
     public void div(int reg0, int reg1, int reg2) {
@@ -390,6 +336,10 @@ public final class ModuleAssembler {
 
     public void panic() {
         instructions.add(new Raw(0xfa800001));
+    }
+
+    public void ret() {
+        instructions.add(new BranchRegister(30));
     }
 
     public void addModule(AssembledModule module) {
