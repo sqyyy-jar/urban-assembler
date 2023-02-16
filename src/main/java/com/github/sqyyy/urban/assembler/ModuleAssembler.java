@@ -335,7 +335,7 @@ public final class ModuleAssembler {
     }
 
     public void panic() {
-        instructions.add(new Raw(0xfa800001));
+        instructions.add(new Raw(0xfae00001));
     }
 
     public void ret() {
