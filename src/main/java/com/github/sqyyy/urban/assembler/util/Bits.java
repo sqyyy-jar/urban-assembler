@@ -1,4 +1,4 @@
-package com.github.sqyyy.urban.assembler;
+package com.github.sqyyy.urban.assembler.util;
 
 import java.io.IOException;
 import java.io.OutputStream;
