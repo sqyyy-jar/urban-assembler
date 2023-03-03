@@ -80,4 +80,22 @@ public class Function implements Instructable<Function> {
     public void addInstruction(Instruction instruction) {
         instructions.add(instruction);
     }
+
+    public Function constant(String label, long value) {
+        offsetTable.put(label, new Offset.FunctionConstOffset(constants.size()));
+        constants.add(new Constant.Integer<>(value));
+        return this;
+    }
+
+    public Function constant(String label, double value) {
+        offsetTable.put(label, new Offset.FunctionConstOffset(constants.size()));
+        constants.add(new Constant.Float<>(value));
+        return this;
+    }
+
+    public Function constant(String label, String value) {
+        offsetTable.put(label, new Offset.FunctionConstOffset(constants.size()));
+        constants.add(new Constant.CString<>(value));
+        return this;
+    }
 }

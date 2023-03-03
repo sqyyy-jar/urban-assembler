@@ -132,4 +132,22 @@ public class Module {
             }
         }
     }
+
+    public Module constant(String label, long value) {
+        offsetTable.put(label, new Offset.ModuleConstOffset(constants.size()));
+        constants.add(new Constant.Integer<>(value));
+        return this;
+    }
+
+    public Module constant(String label, double value) {
+        offsetTable.put(label, new Offset.ModuleConstOffset(constants.size()));
+        constants.add(new Constant.Float<>(value));
+        return this;
+    }
+
+    public Module constant(String label, String value) {
+        offsetTable.put(label, new Offset.ModuleConstOffset(constants.size()));
+        constants.add(new Constant.CString<>(value));
+        return this;
+    }
 }
