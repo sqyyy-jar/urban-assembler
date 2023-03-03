@@ -1,6 +1,7 @@
 package com.github.sqyyy.urban.assembler.model;
 
 import com.github.sqyyy.urban.assembler.util.Bits;
+import com.github.sqyyy.urban.assembler.util.Utils;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -42,7 +43,7 @@ public class Function implements Instructable<Function> {
         for (var constant : constants) {
             var len1 = constant.len();
             len += len1;
-            len += len1 % 4;
+            len += Utils.alignment(len1, 4);
         }
         return len;
     }
@@ -53,7 +54,7 @@ public class Function implements Instructable<Function> {
             var len1 = constants.get(i)
                 .len();
             len += len1;
-            len += len1 % 4;
+            len += Utils.alignment(len1, 4);
         }
         return len;
     }
@@ -65,7 +66,9 @@ public class Function implements Instructable<Function> {
     public void assemble(OutputStream out) throws IOException {
         for (var constant : constants) {
             constant.write(this, out);
-            for (var i = 0; i < constant.len() % 4; i++) {
+            out.flush();
+            var len = constant.len();
+            for (var i = 0; i < Utils.alignment(len, 4); i++) {
                 out.write(0);
             }
         }
@@ -96,6 +99,12 @@ public class Function implements Instructable<Function> {
     public Function constant(String label, String value) {
         offsetTable.put(label, new Offset.FunctionConstOffset(constants.size()));
         constants.add(new Constant.CString<>(value));
+        return this;
+    }
+
+    public Function staticAlloc(String label, long capacity) {
+        offsetTable.put(label, new Offset.FunctionConstOffset(constants.size()));
+        constants.add(new Constant.Buffer<>(capacity));
         return this;
     }
 }

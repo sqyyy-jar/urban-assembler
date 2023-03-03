@@ -7,7 +7,7 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
 public sealed interface Constant<T>
-    permits Constant.AbsoluteLabelAddress, Constant.AbsoluteModuleLabelAddress, Constant.CString, Constant.Float,
+    permits Constant.AbsoluteLabelAddress, Constant.AbsoluteModuleLabelAddress, Constant.Buffer, Constant.CString, Constant.Float,
     Constant.Integer {
     void write(T t, OutputStream out) throws IOException;
 
@@ -53,6 +53,20 @@ public sealed interface Constant<T>
         @Override
         public long len() {
             return bytes.length + 1;
+        }
+    }
+
+    record Buffer<T>(long capacity) implements Constant<T> {
+        @Override
+        public void write(T t, OutputStream out) throws IOException {
+            for (long i = 0; i < capacity; i++) {
+                out.write(0);
+            }
+        }
+
+        @Override
+        public long len() {
+            return capacity;
         }
     }
 

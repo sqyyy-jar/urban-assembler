@@ -8,7 +8,15 @@ public class Utils {
         if (value % alignment == 0L) {
             return value;
         } else {
-            return value - (value % alignment) + alignment;
+            return value - value % alignment + alignment;
+        }
+    }
+
+    public static long alignment(long value, long alignment) {
+        if (value % alignment == 0L) {
+            return 0L;
+        } else {
+            return alignment - value % alignment;
         }
     }
 }
