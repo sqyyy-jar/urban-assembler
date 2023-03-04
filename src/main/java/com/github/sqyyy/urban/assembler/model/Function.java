@@ -116,4 +116,14 @@ public class Function implements Instructable<Function> {
         instructions.add(new RawInstruction(opcode));
         return this;
     }
+
+    public Function branch(String label) {
+        instructions.add(new BranchLabelInstruction(label, false));
+        return this;
+    }
+
+    public Function branchL(String label) {
+        instructions.add(new BranchLabelInstruction(label, true));
+        return this;
+    }
 }

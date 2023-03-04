@@ -33,6 +33,7 @@ public class Module {
 
     public Module func(Function function) {
         Objects.requireNonNull(function);
+        offsetTable.put(function.getName(), new Offset.ModuleFunctionOffset(functions.size()));
         functions.add(function);
         return this;
     }
@@ -100,7 +101,21 @@ public class Module {
             len += len1;
             len += Utils.alignment(len1, 4);
         }
-        return len;
+        return len + functions.get(index)
+            .constantsLen();
+    }
+
+    public long functionOffset(Function function) {
+        var len = 0;
+        for (var value : functions) {
+            if (value == function) {
+                break;
+            }
+            long len1 = value.len();
+            len += len1;
+            len += Utils.alignment(len1, 4);
+        }
+        return len + function.constantsLen();
     }
 
     public Offset<Module> getOffset(String label) {

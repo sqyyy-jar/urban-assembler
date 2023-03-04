@@ -10,11 +10,11 @@ public interface Offset<T> {
         }
     }
 
-    record ModuleFunctionOffset(int instructionIndex) implements Offset<Module> {
+    record ModuleFunctionOffset(int functionIndex) implements Offset<Module> {
         @Override
         public long address(Module module) {
             return module.includedModulesLen() + module.includedFunctionsLen() + module.constantsLen() +
-                module.functionOffset(instructionIndex);
+                module.functionOffset(functionIndex);
         }
     }
 

@@ -2,19 +2,27 @@ package com.github.sqyyy.urban.assembler;
 
 import com.github.sqyyy.urban.assembler.model.Function;
 import com.github.sqyyy.urban.assembler.model.Module;
+import com.github.sqyyy.urban.assembler.util.BinaryExporter;
 
 import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.nio.file.Path;
+
+import static com.github.sqyyy.urban.assembler.model.Register.R0;
+import static com.github.sqyyy.urban.assembler.model.Register.R1;
 
 public class Bootstrap {
     public static void main(String[] args) throws IOException {
         var mod = new Module();
-        mod.func(new Function(mod, "main").halt())
-            .func(new Function(mod, "test").halt());
-        try (var binary = new RandomAccessFile("", "")) {
-            // Byte magic
-            binary.write(new byte[]{0, 'u', 'r', 'b'});
-        }
+        mod.func(Function.of(mod, "main")
+                .constant("x", 42.0)
+                .ldr(R0, -2)
+                .fti(R1, R0)
+                .branchL("dump")
+                .halt())
+            .func(Function.of(mod, "dump")
+                .raw(-1)
+                .halt());
+        new BinaryExporter().exportExecutable(Path.of("test.bin"), mod, 0);
         //        var asm = new ModuleAssembler();
         //        asm.addModule(Modules.MATH);
         //        asm.labelConst("num");
