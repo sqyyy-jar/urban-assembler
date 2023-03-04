@@ -5,7 +5,7 @@ package com.github.sqyyy.urban.assembler.model;
 import com.github.sqyyy.urban.assembler.util.OpCodes;
 
 /**
- * This interface contains builder methods for each instruction in ISA version {@code 1.0}.
+ * This interface contains builder methods for each instruction in ISA version {@code 1.0.0-pre}.
  */
 @SuppressWarnings("unchecked")
 public interface Instructable<S extends Instructable<S>> {
@@ -60,6 +60,18 @@ public interface Instructable<S extends Instructable<S>> {
     }
 
     /**
+     * {@code rem Xdst Xlhs u17}
+     */
+    default S rem(Register dst, Register lhs, long rhs) {
+        var opcode = OpCodes.L0_REM;
+        opcode |= dst.num() & 0x1f;
+        opcode |= (lhs.num() & 0x1f) << 5;
+        opcode |= (rhs & 0x1ffff) << 10;
+        addInstruction(new RawInstruction(opcode));
+        return (S) this;
+    }
+
+    /**
      * {@code adds Xdst Xlhs i17}
      */
     default S adds(Register dst, Register lhs, long rhs) {
@@ -100,6 +112,18 @@ public interface Instructable<S extends Instructable<S>> {
      */
     default S divs(Register dst, Register lhs, long rhs) {
         var opcode = OpCodes.L0_DIVS;
+        opcode |= dst.num() & 0x1f;
+        opcode |= (lhs.num() & 0x1f) << 5;
+        opcode |= (rhs & 0x1ffff) << 10;
+        addInstruction(new RawInstruction(opcode));
+        return (S) this;
+    }
+
+    /**
+     * {@code rems Xdst Xlhs i17}
+     */
+    default S rems(Register dst, Register lhs, long rhs) {
+        var opcode = OpCodes.L0_REMS;
         opcode |= dst.num() & 0x1f;
         opcode |= (lhs.num() & 0x1f) << 5;
         opcode |= (rhs & 0x1ffff) << 10;
@@ -400,20 +424,20 @@ public interface Instructable<S extends Instructable<S>> {
     }
 
     /**
-     * {@code n_call u21}
+     * {@code ncall u21}
      */
-    default S n_call(long id) {
-        var opcode = OpCodes.L1_N_CALL;
+    default S ncall(long id) {
+        var opcode = OpCodes.L1_NCALL;
         opcode |= id & 0x1fffff;
         addInstruction(new RawInstruction(opcode));
         return (S) this;
     }
 
     /**
-     * {@code v_call u21}
+     * {@code vcall u21}
      */
-    default S v_call(long id) {
-        var opcode = OpCodes.L1_V_CALL;
+    default S vcall(long id) {
+        var opcode = OpCodes.L1_VCALL;
         opcode |= id & 0x1fffff;
         addInstruction(new RawInstruction(opcode));
         return (S) this;
@@ -460,6 +484,18 @@ public interface Instructable<S extends Instructable<S>> {
      */
     default S div(Register dst, Register lhs, Register rhs) {
         var opcode = OpCodes.L2_DIV;
+        opcode |= dst.num() & 0x1f;
+        opcode |= (lhs.num() & 0x1f) << 5;
+        opcode |= (rhs.num() & 0x1f) << 10;
+        addInstruction(new RawInstruction(opcode));
+        return (S) this;
+    }
+
+    /**
+     * {@code rem Xdst Xlhs Xrhs}
+     */
+    default S rem(Register dst, Register lhs, Register rhs) {
+        var opcode = OpCodes.L2_REM;
         opcode |= dst.num() & 0x1f;
         opcode |= (lhs.num() & 0x1f) << 5;
         opcode |= (rhs.num() & 0x1f) << 10;
@@ -516,6 +552,18 @@ public interface Instructable<S extends Instructable<S>> {
     }
 
     /**
+     * {@code rems Xdst Xlhs Xrhs}
+     */
+    default S rems(Register dst, Register lhs, Register rhs) {
+        var opcode = OpCodes.L2_REMS;
+        opcode |= dst.num() & 0x1f;
+        opcode |= (lhs.num() & 0x1f) << 5;
+        opcode |= (rhs.num() & 0x1f) << 10;
+        addInstruction(new RawInstruction(opcode));
+        return (S) this;
+    }
+
+    /**
      * {@code addf Xdst Xlhs Xrhs}
      */
     default S addf(Register dst, Register lhs, Register rhs) {
@@ -556,6 +604,18 @@ public interface Instructable<S extends Instructable<S>> {
      */
     default S divf(Register dst, Register lhs, Register rhs) {
         var opcode = OpCodes.L2_DIVF;
+        opcode |= dst.num() & 0x1f;
+        opcode |= (lhs.num() & 0x1f) << 5;
+        opcode |= (rhs.num() & 0x1f) << 10;
+        addInstruction(new RawInstruction(opcode));
+        return (S) this;
+    }
+
+    /**
+     * {@code remf Xdst Xlhs Xrhs}
+     */
+    default S remf(Register dst, Register lhs, Register rhs) {
+        var opcode = OpCodes.L2_REMF;
         opcode |= dst.num() & 0x1f;
         opcode |= (lhs.num() & 0x1f) << 5;
         opcode |= (rhs.num() & 0x1f) << 10;
@@ -694,6 +754,28 @@ public interface Instructable<S extends Instructable<S>> {
     }
 
     /**
+     * {@code fti Xdst Xsrc}
+     */
+    default S fti(Register dst, Register src) {
+        var opcode = OpCodes.L3_FTI;
+        opcode |= dst.num() & 0x1f;
+        opcode |= (src.num() & 0x1f) << 5;
+        addInstruction(new RawInstruction(opcode));
+        return (S) this;
+    }
+
+    /**
+     * {@code itf Xdst Xsrc}
+     */
+    default S itf(Register dst, Register src) {
+        var opcode = OpCodes.L3_ITF;
+        opcode |= dst.num() & 0x1f;
+        opcode |= (src.num() & 0x1f) << 5;
+        addInstruction(new RawInstruction(opcode));
+        return (S) this;
+    }
+
+    /**
      * {@code branch Xdst}
      */
     default S branch(Register dst) {
@@ -714,20 +796,140 @@ public interface Instructable<S extends Instructable<S>> {
     }
 
     /**
-     * {@code branch.ld Xdst}
+     * {@code branch.ld Xsrc}
      */
-    default S branchLd(Register dst) {
+    default S branchLd(Register src) {
         var opcode = OpCodes.L4_BRANCH_LD;
+        opcode |= src.num() & 0x1f;
+        addInstruction(new RawInstruction(opcode));
+        return (S) this;
+    }
+
+    /**
+     * {@code branch.l.ld Xsrc}
+     */
+    default S branchLLd(Register src) {
+        var opcode = OpCodes.L4_BRANCH_L_LD;
+        opcode |= src.num() & 0x1f;
+        addInstruction(new RawInstruction(opcode));
+        return (S) this;
+    }
+
+    /**
+     * {@code branch.bo Xdst}
+     */
+    default S branchBo(Register dst) {
+        var opcode = OpCodes.L4_BRANCH_BO;
         opcode |= dst.num() & 0x1f;
         addInstruction(new RawInstruction(opcode));
         return (S) this;
     }
 
     /**
-     * {@code branch.l.ld Xdst}
+     * {@code branch.l.bo Xdst}
      */
-    default S branchLLd(Register dst) {
-        var opcode = OpCodes.L4_BRANCH_L_LD;
+    default S branchLBo(Register dst) {
+        var opcode = OpCodes.L4_BRANCH_L_BO;
+        opcode |= dst.num() & 0x1f;
+        addInstruction(new RawInstruction(opcode));
+        return (S) this;
+    }
+
+    /**
+     * {@code branch.ld.bo Xsrc}
+     */
+    default S branchLdBo(Register src) {
+        var opcode = OpCodes.L4_BRANCH_LD_BO;
+        opcode |= src.num() & 0x1f;
+        addInstruction(new RawInstruction(opcode));
+        return (S) this;
+    }
+
+    /**
+     * {@code branch.bo.ld Xsrc}
+     */
+    default S branchBoLd(Register src) {
+        var opcode = OpCodes.L4_BRANCH_BO_LD;
+        opcode |= src.num() & 0x1f;
+        addInstruction(new RawInstruction(opcode));
+        return (S) this;
+    }
+
+    /**
+     * {@code branch.bo.ld.bo Xsrc}
+     */
+    default S branchBoLdBo(Register src) {
+        var opcode = OpCodes.L4_BRANCH_BO_LD_BO;
+        opcode |= src.num() & 0x1f;
+        addInstruction(new RawInstruction(opcode));
+        return (S) this;
+    }
+
+    /**
+     * {@code branch.l.ld.bo Xsrc}
+     */
+    default S branchLLdBo(Register src) {
+        var opcode = OpCodes.L4_BRANCH_L_LD_BO;
+        opcode |= src.num() & 0x1f;
+        addInstruction(new RawInstruction(opcode));
+        return (S) this;
+    }
+
+    /**
+     * {@code branch.l.bo.ld Xsrc}
+     */
+    default S branchLBoLd(Register src) {
+        var opcode = OpCodes.L4_BRANCH_L_BO_LD;
+        opcode |= src.num() & 0x1f;
+        addInstruction(new RawInstruction(opcode));
+        return (S) this;
+    }
+
+    /**
+     * {@code branch.l.bo.ld.bo Xsrc}
+     */
+    default S branchLBoLdBo(Register src) {
+        var opcode = OpCodes.L4_BRANCH_L_BO_LD_BO;
+        opcode |= src.num() & 0x1f;
+        addInstruction(new RawInstruction(opcode));
+        return (S) this;
+    }
+
+    /**
+     * {@code ncall Xid}
+     */
+    default S ncall(Register id) {
+        var opcode = OpCodes.L4_NCALL;
+        opcode |= id.num() & 0x1f;
+        addInstruction(new RawInstruction(opcode));
+        return (S) this;
+    }
+
+    /**
+     * {@code vcall Xid}
+     */
+    default S vcall(Register id) {
+        var opcode = OpCodes.L4_VCALL;
+        opcode |= id.num() & 0x1f;
+        addInstruction(new RawInstruction(opcode));
+        return (S) this;
+    }
+
+    /**
+     * {@code ldbo Xdst}
+     */
+    default S ldbo(Register dst) {
+        var opcode = OpCodes.L4_LDBO;
+        opcode |= dst.num() & 0x1f;
+        addInstruction(new RawInstruction(opcode));
+        return (S) this;
+    }
+
+    /**
+     * {@code ldpc Xdst}
+     */
+    default S ldpc(Register dst) {
+        var opcode = OpCodes.L4_LDPC;
         opcode |= dst.num() & 0x1f;
         addInstruction(new RawInstruction(opcode));
         return (S) this;
