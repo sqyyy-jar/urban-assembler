@@ -117,6 +117,11 @@ public class Function implements Instructable<Function> {
         return this;
     }
 
+    public Function ret() {
+        branch(Register.R30);
+        return this;
+    }
+
     public Function branch(String label) {
         instructions.add(new BranchLabelInstruction(label, false));
         return this;
