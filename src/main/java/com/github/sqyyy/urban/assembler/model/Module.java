@@ -107,35 +107,58 @@ public class Module {
         return offsetTable.get(label);
     }
 
-    public void assemble(OutputStream out) throws IOException {
+    public long assemble(OutputStream out) throws IOException {
+        var hasMain = false;
+        var mainOffset = 0;
         for (var includedModule : includedModules) {
             includedModule.write(out);
             var len = includedModule.len();
+            mainOffset += len;
             for (var i = 0; i < Utils.alignment(len, 4); i++) {
                 out.write(0);
+                mainOffset++;
             }
         }
         for (var includedFunction : includedFunctions) {
             includedFunction.write(out);
             var len = includedFunction.len();
+            mainOffset += len;
             for (var i = 0; i < Utils.alignment(len, 4); i++) {
                 out.write(0);
+                mainOffset++;
             }
         }
         for (var constant : constants) {
             constant.write(this, out);
             var len = constant.len();
+            mainOffset += len;
             for (var i = 0; i < Utils.alignment(len, 4); i++) {
                 out.write(0);
+                mainOffset++;
             }
         }
         for (var function : functions) {
             function.assemble(out);
+            if (function.getName()
+                .equals("main")) {
+                if (hasMain) {
+                    throw new RuntimeException("Multiple main functions");
+                }
+                mainOffset += function.constantsLen();
+                hasMain = true;
+            }
             var len = function.len();
+            if (!hasMain) {
+                mainOffset += len;
+            }
             for (int i = 0; i < Utils.alignment(len, 4); i++) {
                 out.write(0);
+                if (!hasMain) {
+                    mainOffset++;
+                }
             }
         }
+        return hasMain ? mainOffset : -1;
     }
 
     public Module constant(String label, long value) {

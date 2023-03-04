@@ -22,6 +22,10 @@ public class Function implements Instructable<Function> {
         this.name = name;
     }
 
+    public static Function of(Module parent, String name) {
+        return new Function(parent, name);
+    }
+
     public Module getParent() {
         return parent;
     }
@@ -105,6 +109,11 @@ public class Function implements Instructable<Function> {
     public Function staticAlloc(String label, long capacity) {
         offsetTable.put(label, new Offset.FunctionConstOffset(constants.size()));
         constants.add(new Constant.Buffer<>(capacity));
+        return this;
+    }
+
+    public Function raw(int opcode) {
+        instructions.add(new RawInstruction(opcode));
         return this;
     }
 }
