@@ -5,7 +5,7 @@ package com.github.sqyyy.urban.assembler.model;
 import com.github.sqyyy.urban.assembler.util.OpCodes;
 
 /**
- * This interface contains builder methods for each instruction in ISA version {@code 1.0.0-pre}.
+ * This interface contains builder methods for each instruction in ISA version {@code 1.1.0-pre}.
  */
 @SuppressWarnings("unchecked")
 public interface Instructable<S extends Instructable<S>> {
@@ -64,42 +64,6 @@ public interface Instructable<S extends Instructable<S>> {
      */
     default S rem(Register dst, Register lhs, long rhs) {
         var opcode = OpCodes.L0_REM;
-        opcode |= dst.num() & 0x1f;
-        opcode |= (lhs.num() & 0x1f) << 5;
-        opcode |= (rhs & 0x1ffff) << 10;
-        addInstruction(new RawInstruction(opcode));
-        return (S) this;
-    }
-
-    /**
-     * {@code adds Xdst Xlhs i17}
-     */
-    default S adds(Register dst, Register lhs, long rhs) {
-        var opcode = OpCodes.L0_ADDS;
-        opcode |= dst.num() & 0x1f;
-        opcode |= (lhs.num() & 0x1f) << 5;
-        opcode |= (rhs & 0x1ffff) << 10;
-        addInstruction(new RawInstruction(opcode));
-        return (S) this;
-    }
-
-    /**
-     * {@code subs Xdst Xlhs i17}
-     */
-    default S subs(Register dst, Register lhs, long rhs) {
-        var opcode = OpCodes.L0_SUBS;
-        opcode |= dst.num() & 0x1f;
-        opcode |= (lhs.num() & 0x1f) << 5;
-        opcode |= (rhs & 0x1ffff) << 10;
-        addInstruction(new RawInstruction(opcode));
-        return (S) this;
-    }
-
-    /**
-     * {@code muls Xdst Xlhs i17}
-     */
-    default S muls(Register dst, Register lhs, long rhs) {
-        var opcode = OpCodes.L0_MULS;
         opcode |= dst.num() & 0x1f;
         opcode |= (lhs.num() & 0x1f) << 5;
         opcode |= (rhs & 0x1ffff) << 10;
@@ -496,42 +460,6 @@ public interface Instructable<S extends Instructable<S>> {
      */
     default S rem(Register dst, Register lhs, Register rhs) {
         var opcode = OpCodes.L2_REM;
-        opcode |= dst.num() & 0x1f;
-        opcode |= (lhs.num() & 0x1f) << 5;
-        opcode |= (rhs.num() & 0x1f) << 10;
-        addInstruction(new RawInstruction(opcode));
-        return (S) this;
-    }
-
-    /**
-     * {@code adds Xdst Xlhs Xrhs}
-     */
-    default S adds(Register dst, Register lhs, Register rhs) {
-        var opcode = OpCodes.L2_ADDS;
-        opcode |= dst.num() & 0x1f;
-        opcode |= (lhs.num() & 0x1f) << 5;
-        opcode |= (rhs.num() & 0x1f) << 10;
-        addInstruction(new RawInstruction(opcode));
-        return (S) this;
-    }
-
-    /**
-     * {@code subs Xdst Xlhs Xrhs}
-     */
-    default S subs(Register dst, Register lhs, Register rhs) {
-        var opcode = OpCodes.L2_SUBS;
-        opcode |= dst.num() & 0x1f;
-        opcode |= (lhs.num() & 0x1f) << 5;
-        opcode |= (rhs.num() & 0x1f) << 10;
-        addInstruction(new RawInstruction(opcode));
-        return (S) this;
-    }
-
-    /**
-     * {@code muls Xdst Xlhs Xrhs}
-     */
-    default S muls(Register dst, Register lhs, Register rhs) {
-        var opcode = OpCodes.L2_MULS;
         opcode |= dst.num() & 0x1f;
         opcode |= (lhs.num() & 0x1f) << 5;
         opcode |= (rhs.num() & 0x1f) << 10;
