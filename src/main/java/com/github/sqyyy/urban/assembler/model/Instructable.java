@@ -5,7 +5,7 @@ package com.github.sqyyy.urban.assembler.model;
 import com.github.sqyyy.urban.assembler.util.OpCodes;
 
 /**
- * This interface contains builder methods for each instruction in ISA version {@code 1.1.0-pre}.
+ * This interface contains builder methods for each instruction in ISA version {@code 1.2.0-pre}.
  */
 @SuppressWarnings("unchecked")
 public interface Instructable<S extends Instructable<S>> {
@@ -241,6 +241,28 @@ public interface Instructable<S extends Instructable<S>> {
         var opcode = OpCodes.L0_BRANCH_GE;
         opcode |= dst & 0x3fffff;
         opcode |= (cond.num() & 0x1f) << 22;
+        addInstruction(new RawInstruction(opcode));
+        return (S) this;
+    }
+
+    /**
+     * {@code branch.zr i22 Xsrc}
+     */
+    default S branchZr(long dst, Register src) {
+        var opcode = OpCodes.L0_BRANCH_ZR;
+        opcode |= dst & 0x3fffff;
+        opcode |= (src.num() & 0x1f) << 22;
+        addInstruction(new RawInstruction(opcode));
+        return (S) this;
+    }
+
+    /**
+     * {@code branch.nz i22 Xsrc}
+     */
+    default S branchNz(long dst, Register src) {
+        var opcode = OpCodes.L0_BRANCH_NZ;
+        opcode |= dst & 0x3fffff;
+        opcode |= (src.num() & 0x1f) << 22;
         addInstruction(new RawInstruction(opcode));
         return (S) this;
     }
